@@ -21,7 +21,9 @@ class App extends React.Component {
         items: [
           {
             name: `${Math.floor(Math.random() * 1000000)}`,
-            value: this.input.value
+            value: (
+              <p style={{ padding: "16px 0 16px 0" }}>{this.input.value}</p>
+            )
           },
           ...prev.items
         ]
@@ -31,6 +33,12 @@ class App extends React.Component {
         this.input.focus();
       }
     );
+  };
+
+  removeItem = index => {
+    this.setState(prev => ({
+      items: prev.items.filter((item, i) => i !== index)
+    }));
   };
 
   render() {
@@ -43,7 +51,10 @@ class App extends React.Component {
         <input ref={input => (this.input = input)} type="text" />
         <button onClick={this.addItem}>Add</button>
         <div style={{ position: "absolute", overflow: "hidden" }}>
-          <AnimationGroup items={this.state.items} />
+          <AnimationGroup
+            items={this.state.items}
+            removeMethod={this.removeItem}
+          />
         </div>
       </div>
     );

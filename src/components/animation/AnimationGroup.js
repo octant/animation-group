@@ -2,8 +2,30 @@ import React, { Component } from "react";
 import AnimatedItem from "./AnimatedItem";
 
 class AnimationGroup extends Component {
-  handleChange = (height, width, index, direction) => {
-    console.log(height, width, index, direction);
+  constructor(props) {
+    super(props);
+
+    this.state = { changing: {} };
+  }
+
+  handleChange = (height, width, index, remove = false) => {
+    this.setState(
+      () => ({
+        changing: {
+          index,
+          height,
+          width
+        }
+      }),
+      () => {
+        if (remove) {
+          this.props.removeMethod(index);
+        }
+        setTimeout(() => {
+          this.setState(() => ({ changing: {} }));
+        }, 0);
+      }
+    );
   };
 
   render() {
@@ -14,7 +36,23 @@ class AnimationGroup extends Component {
       >
         {this.props.items.map(({ name, value }, i) => {
           return (
-            <AnimatedItem key={name} index={i} changeMethod={this.handleChange}>
+            <AnimatedItem
+              top={
+                Object.keys(this.state.changing).length > 0 &&
+                this.state.changing.index !== i
+                  ? -(this.state.changing.height + 16)
+                  : 0
+              }
+              properties={
+                Object.keys(this.state.changing).length > 0 &&
+                this.state.changing.index !== i
+                  ? "right"
+                  : "top, right"
+              }
+              key={name}
+              index={i}
+              changeMethod={this.handleChange}
+            >
               {value}
             </AnimatedItem>
           );

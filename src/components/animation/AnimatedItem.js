@@ -15,46 +15,68 @@ export default class AnimatedItem extends Component {
       transitionTimingFunction: this.timingFunction,
       transitionDelay: `${this.delay}${this.units}`,
       position: "relative",
-      top: 0,
-      right: 0
+      margin: 0
     };
   }
 
   componentDidMount() {
     this.setState(
-      prev => ({
-        transitionProperty: "top",
-        transitionDuration: `${this.duration}${this.units}`,
-        transitionTimingFunction: this.timingFunction,
-        transitionDelay: `${this.delay}${this.units}`,
-        top: -this.container.clientHeight,
+      () => ({
         right: -this.container.clientWidth
       }),
       () => {
         setTimeout(() => {
           this.setState(prev => ({
-            transitionProperty: this.properties,
-            top: 0,
             right: 0
           }));
-        }, 0);
+        }, this.duration + this.delay);
       }
     );
     this.props.changeMethod(
       this.container.clientHeight,
       this.container.clientWidth,
-      this.props.index,
-      true
+      this.props.index
     );
   }
+
+  handleRemove = () => {
+    this.setState(
+      () => ({
+        right: -this.container.clientWidth
+      }),
+      () => {
+        setTimeout(
+          () =>
+            this.props.changeMethod(
+              this.container.clientHeight,
+              this.container.clientWidth,
+              this.props.index,
+              true
+            ),
+          this.delay + this.duration
+        );
+      }
+    );
+  };
 
   render() {
     return (
       <div
-        style={{ ...this.state }}
+        id={this.props.index}
+        style={{
+          ...this.state,
+          top: this.props.top || 0,
+          transitionProperty: this.props.properties || this.properties,
+          margin: 0
+        }}
         ref={element => (this.container = element)}
       >
-        {this.props.children}
+        <div id="content">{this.props.children}</div>
+        <div style={{ position: "absolute", right: 0, top: 0 }}>
+          <span style={{ cursor: "pointer" }} onClick={this.handleRemove}>
+            x
+          </span>
+        </div>
       </div>
     );
   }
