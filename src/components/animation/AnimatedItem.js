@@ -67,12 +67,18 @@ export default class AnimatedItem extends Component {
           ...this.state,
           top: this.props.top || 0,
           transitionProperty: this.props.properties || this.properties,
-          margin: 0
+          overflow: "auto"
         }}
         ref={element => (this.container = element)}
       >
         <div id="content">{this.props.children}</div>
-        <div style={{ position: "absolute", right: 0, top: 0 }}>
+        <div
+          style={{
+            position: "absolute",
+            right: 0,
+            top: 0
+          }}
+        >
           <span style={{ cursor: "pointer" }} onClick={this.handleRemove}>
             x
           </span>

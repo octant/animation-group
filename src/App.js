@@ -21,9 +21,7 @@ class App extends React.Component {
         items: [
           {
             name: `${Math.floor(Math.random() * 1000000)}`,
-            value: (
-              <p style={{ padding: "16px 0 16px 0" }}>{this.input.value}</p>
-            )
+            value: <p>{this.input.value}</p>
           },
           ...prev.items
         ]

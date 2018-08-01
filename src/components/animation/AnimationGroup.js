@@ -28,6 +28,17 @@ class AnimationGroup extends Component {
     );
   };
 
+  dynamicProps = index => {
+    if (
+      Object.keys(this.state.changing).length > 0 &&
+      this.state.changing.index !== index
+    ) {
+      return { top: -this.state.changing.height, properties: "right" };
+    } else {
+      return { top: 0, properties: "top, right" };
+    }
+  };
+
   render() {
     return (
       <div
@@ -37,18 +48,7 @@ class AnimationGroup extends Component {
         {this.props.items.map(({ name, value }, i) => {
           return (
             <AnimatedItem
-              top={
-                Object.keys(this.state.changing).length > 0 &&
-                this.state.changing.index !== i
-                  ? -(this.state.changing.height + 16)
-                  : 0
-              }
-              properties={
-                Object.keys(this.state.changing).length > 0 &&
-                this.state.changing.index !== i
-                  ? "right"
-                  : "top, right"
-              }
+              {...this.dynamicProps(i)}
               key={name}
               index={i}
               changeMethod={this.handleChange}
