@@ -25,7 +25,7 @@ class AnimationGroup extends Component {
         }
         setTimeout(() => {
           this.setState(() => ({ changing: {} }));
-        }, 0);
+        }, 20);
       }
     );
   };
@@ -57,13 +57,12 @@ class AnimationGroup extends Component {
       <div
         ref={element => (this.container = element)}
         style={{
-          width: "300px",
           overflow: "hidden",
           height: this.state.height,
           transitionProperty: "height",
           transitionDuration: "100ms",
           transitionTimingFunction: "ease-in-out",
-          transitionDelay: "200ms"
+          transitionDelay: "300ms"
         }}
       >
         {this.props.items.map(({ name, value }, i) => {

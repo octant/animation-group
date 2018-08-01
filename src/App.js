@@ -12,7 +12,9 @@ class App extends React.Component {
     };
   }
 
-  addItem = () => {
+  addItem = e => {
+    e.preventDefault();
+
     if (this.input.value === "") {
       return;
     }
@@ -46,9 +48,11 @@ class App extends React.Component {
           <img src={logo} className="App-logo" alt="logo" />
           <h1 className="App-title">Welcome to React</h1>
         </header>
-        <input ref={input => (this.input = input)} type="text" />
-        <button onClick={this.addItem}>Add</button>
-        <div style={{ position: "absolute" }}>
+        <form onSubmit={this.addItem}>
+          <input ref={input => (this.input = input)} type="text" />
+          <button>Add</button>
+        </form>
+        <div style={{ position: "absolute", width: "100%" }}>
           <AnimationGroup
             items={this.state.items}
             removeMethod={this.removeItem}
