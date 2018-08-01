@@ -48,7 +48,7 @@ class App extends React.Component {
         </header>
         <input ref={input => (this.input = input)} type="text" />
         <button onClick={this.addItem}>Add</button>
-        <div style={{ position: "absolute", overflow: "hidden" }}>
+        <div style={{ position: "absolute" }}>
           <AnimationGroup
             items={this.state.items}
             removeMethod={this.removeItem}

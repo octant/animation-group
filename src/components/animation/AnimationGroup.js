@@ -5,17 +5,19 @@ class AnimationGroup extends Component {
   constructor(props) {
     super(props);
 
-    this.state = { changing: {} };
+    this.state = { changing: {}, height: 0 };
   }
 
   handleChange = (height, width, index, remove = false) => {
     this.setState(
-      () => ({
+      prev => ({
         changing: {
           index,
           height,
-          width
-        }
+          width,
+          remove
+        },
+        height: remove ? prev.height - height : prev.height + height
       }),
       () => {
         if (remove) {
@@ -29,13 +31,24 @@ class AnimationGroup extends Component {
   };
 
   dynamicProps = index => {
-    if (
-      Object.keys(this.state.changing).length > 0 &&
-      this.state.changing.index !== index
-    ) {
-      return { top: -this.state.changing.height, properties: "right" };
+    if (this.state.changing.remove) {
+      if (
+        Object.keys(this.state.changing).length > 0 &&
+        this.state.changing.index <= index
+      ) {
+        return { top: this.state.changing.height, properties: "right" };
+      } else {
+        return { top: 0, properties: "top, right" };
+      }
     } else {
-      return { top: 0, properties: "top, right" };
+      if (
+        Object.keys(this.state.changing).length > 0 &&
+        this.state.changing.index < index
+      ) {
+        return { top: -this.state.changing.height, properties: "right" };
+      } else {
+        return { top: 0, properties: "top, right" };
+      }
     }
   };
 
@@ -43,7 +56,15 @@ class AnimationGroup extends Component {
     return (
       <div
         ref={element => (this.container = element)}
-        style={{ width: "200px" }}
+        style={{
+          width: "300px",
+          overflow: "hidden",
+          height: this.state.height,
+          transitionProperty: "height",
+          transitionDuration: "100ms",
+          transitionTimingFunction: "ease-in-out",
+          transitionDelay: "200ms"
+        }}
       >
         {this.props.items.map(({ name, value }, i) => {
           return (
