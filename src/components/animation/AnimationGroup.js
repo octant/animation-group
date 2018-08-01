@@ -62,7 +62,7 @@ class AnimationGroup extends Component {
           transitionProperty: "height",
           transitionDuration: "100ms",
           transitionTimingFunction: "ease-in-out",
-          transitionDelay: "300ms"
+          transitionDelay: "200ms"
         }}
       >
         {this.props.items.map(({ name, value }, i) => {
